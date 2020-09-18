@@ -1,0 +1,56 @@
+#  Iterative Deepening
+import copy
+def compare(arr1,arr2):
+    fin_state = arr2[0]
+    for state in arr1:
+        if state==fin_state:
+            return True
+    return False
+initial_state=[['a'],['b','c'],[]]
+goal_state=[['a','b','c'],[],[]]
+queue=[]
+visited=[]
+depth=1
+queue.append(initial_state)
+count=0
+def children(arr,inner_queue):
+    children=[]
+    for i in range(len(arr)):
+        temp=copy.deepcopy(arr)
+        if len(arr[i])==0:
+            continue
+        else:
+            top=temp[i][-1]
+            temp[i].pop(-1)
+            for j in range(len(temp)):
+                temp1=copy.deepcopy(temp)
+                if i==j:
+                    continue
+                temp1[j].append(top)
+                if temp1 not in inner_queue and temp1 not in visited:
+                    children.append(temp1)
+    return children
+depth_count=0
+flag_outer=False
+flag=False
+while True:
+    inner_queue=[]
+    while len(queue)!=0:
+        inner_queue.append(queue.pop(0))
+    while(len(inner_queue)!=0):
+        arr=inner_queue.pop(0)
+        visited.append(copy.deepcopy(arr))
+        if compare(arr,goal_state):
+            print(f"COMPLETE at depth:{depth_count}")
+            flag=True
+            flag_outer=True
+            break
+        else:
+            child=children(arr,inner_queue)
+            for c in child:
+                queue.append(c)
+    depth_count+=1
+    if flag:
+        break
+if not flag_outer:
+    print("INCOMPLETE")
