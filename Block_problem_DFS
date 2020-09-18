@@ -1,0 +1,45 @@
+#  dfs approach
+import copy
+def compare(arr1,arr2):
+    fin_state = arr2[0]
+    for state in arr1:
+        if state==fin_state:
+            return True
+    return False
+initial_state=[['a'],['b','c'],[]]
+goal_state=[['a','b','c'],[],[]]
+stack=[]
+visited=[]
+stack.append(initial_state)
+count=0
+def children(arr):
+    children=[]
+    for i in range(len(arr)):
+        temp=copy.deepcopy(arr)
+        if len(arr[i])==0:
+            continue
+        else:
+            top=temp[i][-1]
+            temp[i].pop(-1)
+            for j in range(len(temp)):
+                temp1=copy.deepcopy(temp)
+                if i==j:
+                    continue
+                temp1[j].append(top)
+                if temp1 not in visited and temp1 not in stack:
+                    children.append(temp1)
+    return children
+while len(stack)!=0:
+    arr=stack.pop()
+    visited.append(copy.deepcopy(arr))
+    count+=1
+    if compare(arr,goal_state):
+        print(f"no of steps:{count}")
+        print("path")
+        for i in visited:
+            print(i)
+        break
+    else:
+        child=children(arr)
+        for c in child:
+            stack.append(copy.deepcopy(c))
