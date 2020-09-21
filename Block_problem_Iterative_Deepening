@@ -1,5 +1,6 @@
 #  Iterative Deepening
 import copy
+# COMPARE FUNCTION IS THERE TO COMPARE THE CURRENT STATE AND FINAL STATE
 def compare(arr1,arr2):
     fin_state = arr2[0]
     for state in arr1:
@@ -30,10 +31,12 @@ def children(arr,inner_queue):
                 if temp1 not in inner_queue and temp1 not in visited:
                     children.append(temp1)
     return children
+# depth_counter is the counter which is incremented so that we can track of depth
 depth_count=0
 flag_outer=False
 flag=False
 while True:
+    # inner_queue to track the children depth wise
     inner_queue=[]
     while len(queue)!=0:
         inner_queue.append(queue.pop(0))
@@ -49,6 +52,7 @@ while True:
             child=children(arr,inner_queue)
             for c in child:
                 queue.append(c)
+    # incrementing the depth
     depth_count+=1
     if flag:
         break
