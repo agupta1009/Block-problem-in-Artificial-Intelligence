@@ -1,19 +1,22 @@
 #  depth limited search
 import copy
+# COMPARE FUNCTION IS THERE TO COMPARE THE CURRENT STATE AND FINAL STATE
 def compare(arr1,arr2):
     fin_state = arr2[0]
     for state in arr1:
         if state==fin_state:
             return True
     return False
+# initial state
 initial_state=[['b'],['a','c'],[]]
+# goal state
 goal_state=[['a','b','c'],[],[]]
 queue=[]
 visited=[]
 depth=1
 queue.append(initial_state)
 count=0
-def children(arr,stack):
+def children(arr,queue_inner):
     children=[]
     for i in range(len(arr)):
         temp=copy.deepcopy(arr)
@@ -27,18 +30,20 @@ def children(arr,stack):
                 if i==j:
                     continue
                 temp1[j].append(top)
-                if temp1 not in stack and temp1 not in visited:
+                if temp1 not in queue_inner and temp1 not in visited:
                     children.append(temp1)
     return children
+# depth_counter is the counter which is incremented so that we can track of depth
 depth_count=0
 flag_outer=False
 flag=False
 while depth_count<=depth:
-    stack=[]
+    # queue_inner to track the children depth wise
+    queue_inner=[]
     while len(queue)!=0:
-        stack.append(queue.pop(0))
-    while(len(stack)!=0):
-        arr=stack.pop(0)
+        queue_inner.append(queue.pop(0))
+    while(len(queue_inner)!=0):
+        arr=queue_inner.pop(0)
         visited.append(copy.deepcopy(arr))
         if compare(arr,goal_state):
             print(f"COMPLETE at depth:{depth_count}")
@@ -46,9 +51,10 @@ while depth_count<=depth:
             flag_outer=True
             break
         else:
-            child=children(arr,stack)
+            child=children(arr,queue_inner)
             for c in child:
                 queue.append(c)
+    # incrementing the depth
     depth_count+=1
     if flag:
         break
