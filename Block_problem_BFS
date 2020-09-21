@@ -1,17 +1,23 @@
-# bfs approach
+#  dfs approach
 import copy
+# COMPARE FUNCTION IS THERE TO COMPARE THE CURRENT STATE AND FINAL STATE
 def compare(arr1,arr2):
     fin_state = arr2[0]
     for state in arr1:
         if state==fin_state:
             return True
     return False
+# INITIAL STATE
 initial_state=[['a'],['b','c'],[]]
 goal_state=[['a','b','c'],[],[]]
-queue=[]
+# made stack to implement dfs approach
+stack=[]
+# visited to store the path and to check the travelled path
 visited=[]
-queue.append(initial_state)
+# insert the initial position
+stack.append(initial_state)
 count=0
+# generating children
 def children(arr):
     children=[]
     for i in range(len(arr)):
@@ -26,12 +32,13 @@ def children(arr):
                 if i==j:
                     continue
                 temp1[j].append(top)
-                if temp1 not in visited:
-                    if temp1 not in queue:
-                        children.append(temp1)
+                if temp1 not in visited and temp1 not in stack:
+                    children.append(temp1)
     return children
-while len(queue)!=0:
-    arr=queue.pop(0)
+# operations over stack
+while len(stack)!=0:
+    arr=stack.pop()
+    # deepcopy is used because list is mutable
     visited.append(copy.deepcopy(arr))
     count+=1
     if compare(arr,goal_state):
@@ -41,6 +48,7 @@ while len(queue)!=0:
             print(i)
         break
     else:
+        # cgildren generating
         child=children(arr)
         for c in child:
-            queue.append(copy.deepcopy(c))
+            stack.append(copy.deepcopy(c))
